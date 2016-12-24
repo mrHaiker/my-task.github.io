@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="Quiz" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="Quiz" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="Quiz" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="Quiz" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <link rel="stylesheet" href="bower_components/bootstrap-grid/css/bootstrap-grid.css">
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body ng-controller="mainCtrl" ng-cloak>
+  <header class="header">
+    <div class="container">
+      <div class="header__logo">Quiz game</div>
+    </div>
+  </header>
+  <div class="under-header">
+    <div class="container">
+      <div class="under-header__correct">Correct Answers: {{ successCounter }}</div>
+      <div class="under-header__total">Total Questions: {{ answerCounter }}</div>
+    </div>
+  </div>
+
+  <div class="container" ng-show='quiz'>
+    <div class="question">
+      <p class="question__title">Question #{{ quiz.id }}</p>
+      <p class="question__category">Category: {{ quiz.category.title }}</p>
+      <p class="question__description">{{ quiz.question }}</p>
+      <div class="question__btn question__btn-skip" ng-click="skip()">Skip</div>
+
+      <div ng-include="'templates/question-result.html'"></div>
+
+      <!-- Answer Box -->
+      <div class="question__answer-box answer-box" ng-class="
+      {'answer-box--error':result=='error',
+        'answer-box--success':result=='success'
+      }">
+
+        <div class="answer-box__reset" ng-class="{'answer-box__reset-active':list1.length != 0}" ng-click="reset()">Reset</div>
+        <!-- Empty labels -->
+        <div class="answer-box__complete-answer">
+          <ul class="answer-box__empty-boxes">
+            <li class="answer-box__box-element" ng-repeat="latter in latters track by $index">
+              <div class="answer-box__inner-btn" data-drop="true" ng-model='list1' jqyoui-droppable="{index: {{$index}}, onDrag: validate()}">
+                <div class="btn btn-info btn-draggable" ng-show="list1" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list1" jqyoui-draggable="{index: {{$index}},placeholder:true}" ng-show="list1[$index]">{{ list1[$index] }}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+                  
+        <!-- Labbels with latters -->
+        <ul class="answer-box__word">
+          <li class="answer-box__row" ng-repeat="latter in latters track by $index" data-drop="true" jqyoui-droppable="{index: {{$index}}, applyFilter: 'filterIt'}">
+            <div class="answer-box__latter" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list2" jqyoui-draggable="{index: {{$index}}}" ng-hide="!list2[$index]">{{ list2[$index] }}</div>
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="question__btn question__btn-next" ng-if="result=='success'" ng-click="next()">Next question</div>
+
+    </div>
+  </div>
+
+  
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+  <script src="js/MainCtrl.js"></script>
+  <script src="js/MainModel.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
